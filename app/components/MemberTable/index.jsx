@@ -1,5 +1,7 @@
-import { Table } from "antd";
 import React from "react";
+import { Table } from "antd";
+import { getVerificationStatus } from "../../helpers/getVerificationStatus";
+import BadgeVerificationStatus from "../BadgeVerificationStatus";
 
 function MemberTable({ userDetails }) {
   const userData = userDetails?.edges?.map((item, index) => ({
@@ -25,6 +27,9 @@ function MemberTable({ userDetails }) {
           title: "Verification Status",
           dataIndex: "verificationStatus",
           key: "verificationStatus",
+          render: (text) => (
+            <BadgeVerificationStatus status={getVerificationStatus(text)} />
+          ),
         },
       ],
     },
