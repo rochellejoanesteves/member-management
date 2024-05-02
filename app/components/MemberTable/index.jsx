@@ -5,25 +5,38 @@ import { getStatus } from "../../helpers/getStatus";
 import BadgeVerificationStatus from "../BadgeVerificationStatus";
 import BadgeStatus from "../BadgeStatus";
 import NameDropwDown from "../NameDropDown";
+import VerificationStatusDropDown from "../VerificationStatusDropDown";
 
 function MemberTable({ userDetails }) {
   const [selectedName, setSelectedName] = useState(null);
+  const [selectedVerificationStatus, setSelectedVerificationStatus] =
+    useState(null);
 
   const userData = userDetails?.edges?.map((item, index) => ({
     ...item.node,
     key: index,
   }));
 
+  //
   const handleNameChange = (name) => {
     setSelectedName(name === "Names" ? null : name);
+  };
+
+  const handleVerificationStatus = (verificationStatus) => {
+    setSelectedVerificationStatus(
+      verificationStatus === "Verification Status" ? null : verificationStatus
+    );
   };
 
   // Filtered Members
   const filteredData =
     userData?.filter((user) => {
       const matchesName = !selectedName || user.name === selectedName;
+      const matchesVerificationStatus =
+        !selectedVerificationStatus ||
+        user.verificationStatus === selectedVerificationStatus;
 
-      return matchesName;
+      return matchesName && matchesVerificationStatus;
     }) ?? userData;
 
   // Table Columns
@@ -45,7 +58,7 @@ function MemberTable({ userDetails }) {
       ],
     },
     {
-      title: "Verification Status",
+      title: <VerificationStatusDropDown onChange={handleVerificationStatus} />,
       children: [
         {
           title: "Verification Status",
