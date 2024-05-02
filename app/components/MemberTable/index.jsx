@@ -1,18 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { Table } from "antd";
 import { getVerificationStatus } from "../../helpers/getVerificationStatus";
 import { getStatus } from "../../helpers/getStatus";
 import BadgeVerificationStatus from "../BadgeVerificationStatus";
 import BadgeStatus from "../BadgeStatus";
+import NameDropwDown from "../NameDropDown";
 
 function MemberTable({ userDetails }) {
+  const [selectedName, setSelectedName] = useState(null);
+
   const userData = userDetails?.edges?.map((item, index) => ({
     ...item.node,
     key: index,
   }));
+
+  const handleNameChange = (name) => {
+    setSelectedName(name === "Names" ? null : name);
+  };
+
+  // Filtered Members
+  const filteredData =
+    userData?.filter((user) => {
+      const matchesName = !selectedName || user.name === selectedName;
+
+      return matchesName;
+    }) ?? userData;
+
+  // Table Columns
   const columns = [
     {
-      title: "Name",
+      title: (
+        <NameDropwDown
+          userData={userData}
+          handleNameChange={handleNameChange}
+        />
+      ),
       children: [
         {
           title: "Name",
@@ -100,7 +122,7 @@ function MemberTable({ userDetails }) {
 
   return (
     <div>
-      <Table columns={columns} dataSource={userData} pagination={false} />
+      <Table columns={columns} dataSource={filteredData} pagination={false} />
     </div>
   );
 }
