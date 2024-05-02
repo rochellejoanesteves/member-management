@@ -7,12 +7,14 @@ import BadgeStatus from "../BadgeStatus";
 import NameDropwDown from "../NameDropDown";
 import VerificationStatusDropDown from "../VerificationStatusDropDown";
 import EmailAddressDropDown from "../EmailAddressDropDown";
+import MobileNumberDropDown from "../MobileNumberDropDown";
 
 function MemberTable({ userDetails }) {
   const [selectedName, setSelectedName] = useState(null);
   const [selectedVerificationStatus, setSelectedVerificationStatus] =
     useState(null);
   const [selectedEmailAddress, setSelectedEmailAddress] = useState(null);
+  const [selectedMobileNumber, setSelectedMobileNumber] = useState(null);
 
   const userData = userDetails?.edges?.map((item, index) => ({
     ...item.node,
@@ -34,6 +36,12 @@ function MemberTable({ userDetails }) {
     setSelectedEmailAddress(email === "Email Address" ? null : email);
   };
 
+  const handleMobileNumber = (mobileNumber) => {
+    setSelectedMobileNumber(
+      mobileNumber === "Mobile Number" ? null : mobileNumber
+    );
+  };
+
   // Filtered Members
   const filteredData =
     userData?.filter((user) => {
@@ -43,8 +51,15 @@ function MemberTable({ userDetails }) {
         user.verificationStatus === selectedVerificationStatus;
       const matchesEmail =
         !selectedEmailAddress || user.emailAddress === selectedEmailAddress;
+      const matchesMobileNumber =
+        !selectedMobileNumber || user.mobileNumber === selectedMobileNumber;
 
-      return matchesName && matchesVerificationStatus && matchesEmail;
+      return (
+        matchesName &&
+        matchesVerificationStatus &&
+        matchesEmail &&
+        matchesMobileNumber
+      );
     }) ?? userData;
 
   // Table Columns
@@ -94,7 +109,12 @@ function MemberTable({ userDetails }) {
       ],
     },
     {
-      title: "Mobile Number",
+      title: (
+        <MobileNumberDropDown
+          userData={userData}
+          onChange={handleMobileNumber}
+        />
+      ),
       children: [
         {
           title: "Mobile Number",
