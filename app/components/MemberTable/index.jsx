@@ -1,7 +1,9 @@
 import React from "react";
 import { Table } from "antd";
 import { getVerificationStatus } from "../../helpers/getVerificationStatus";
+import { getStatus } from "../../helpers/getStatus";
 import BadgeVerificationStatus from "../BadgeVerificationStatus";
+import BadgeStatus from "../BadgeStatus";
 
 function MemberTable({ userDetails }) {
   const userData = userDetails?.edges?.map((item, index) => ({
@@ -80,6 +82,7 @@ function MemberTable({ userDetails }) {
           title: "Status",
           dataIndex: "status",
           key: "status",
+          render: (text) => <BadgeStatus status={getStatus(text)} />,
         },
       ],
     },
