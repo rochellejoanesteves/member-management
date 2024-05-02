@@ -52,8 +52,10 @@ export default function Home() {
         <div>Error: {error}</div>
       ) : (
         <div>
-          <h1>Members</h1>
-          <p>View your members here.</p>
+          <div style={{marginBottom: "20px"}}>
+            <h1 style={{marginBottom: "10px"}}>Members</h1>
+            <p>View your members here.</p>
+          </div>
           <MemberTable userDetails={userDetails} />
         </div>
       )}

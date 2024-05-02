@@ -72,7 +72,8 @@ function MemberTable({ userDetails }) {
         matchesVerificationStatus &&
         matchesEmail &&
         matchesMobileNumber &&
-        matchesDomain && matchesStatus
+        matchesDomain &&
+        matchesStatus
       );
     }) ?? userData;
 
@@ -158,9 +159,7 @@ function MemberTable({ userDetails }) {
       ],
     },
     {
-      title: (
-        <StatusDropDown onChange={handleStatus} />
-      ),
+      title: <StatusDropDown onChange={handleStatus} />,
       children: [
         {
           title: "Status",
@@ -183,8 +182,17 @@ function MemberTable({ userDetails }) {
   ];
 
   return (
-    <div>
-      <Table columns={columns} dataSource={filteredData} pagination={false} />
+    <div  style={{
+      borderRadius: "5px",
+      paddingBottom: "10px",
+      backgroundColor: "#0f181f"
+    }}>
+      <Table
+        className="custom-table "
+        columns={columns}
+        dataSource={filteredData}
+        pagination={false}
+      />
     </div>
   );
 }
