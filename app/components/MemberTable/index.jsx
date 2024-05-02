@@ -6,11 +6,13 @@ import BadgeVerificationStatus from "../BadgeVerificationStatus";
 import BadgeStatus from "../BadgeStatus";
 import NameDropwDown from "../NameDropDown";
 import VerificationStatusDropDown from "../VerificationStatusDropDown";
+import EmailAddressDropDown from "../EmailAddressDropDown";
 
 function MemberTable({ userDetails }) {
   const [selectedName, setSelectedName] = useState(null);
   const [selectedVerificationStatus, setSelectedVerificationStatus] =
     useState(null);
+  const [selectedEmailAddress, setSelectedEmailAddress] = useState(null);
 
   const userData = userDetails?.edges?.map((item, index) => ({
     ...item.node,
@@ -28,6 +30,10 @@ function MemberTable({ userDetails }) {
     );
   };
 
+  const handleEmailAddressChange = (email) => {
+    setSelectedEmailAddress(email === "Email Address" ? null : email);
+  };
+
   // Filtered Members
   const filteredData =
     userData?.filter((user) => {
@@ -35,8 +41,10 @@ function MemberTable({ userDetails }) {
       const matchesVerificationStatus =
         !selectedVerificationStatus ||
         user.verificationStatus === selectedVerificationStatus;
+      const matchesEmail =
+        !selectedEmailAddress || user.emailAddress === selectedEmailAddress;
 
-      return matchesName && matchesVerificationStatus;
+      return matchesName && matchesVerificationStatus && matchesEmail;
     }) ?? userData;
 
   // Table Columns
@@ -71,7 +79,12 @@ function MemberTable({ userDetails }) {
       ],
     },
     {
-      title: "Email Address",
+      title: (
+        <EmailAddressDropDown
+          userData={userData}
+          onChange={handleEmailAddressChange}
+        />
+      ),
       children: [
         {
           title: "Email Address",
