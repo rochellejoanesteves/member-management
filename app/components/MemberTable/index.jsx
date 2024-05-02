@@ -8,6 +8,7 @@ import NameDropwDown from "../NameDropDown";
 import VerificationStatusDropDown from "../VerificationStatusDropDown";
 import EmailAddressDropDown from "../EmailAddressDropDown";
 import MobileNumberDropDown from "../MobileNumberDropDown";
+import DomainDropDown from "../DomainDropDown";
 
 function MemberTable({ userDetails }) {
   const [selectedName, setSelectedName] = useState(null);
@@ -15,6 +16,7 @@ function MemberTable({ userDetails }) {
     useState(null);
   const [selectedEmailAddress, setSelectedEmailAddress] = useState(null);
   const [selectedMobileNumber, setSelectedMobileNumber] = useState(null);
+  const [selectedDomain, setSelectedDomain] = useState(null);
 
   const userData = userDetails?.edges?.map((item, index) => ({
     ...item.node,
@@ -42,6 +44,10 @@ function MemberTable({ userDetails }) {
     );
   };
 
+  const handleDomain = (domain) => {
+    setSelectedDomain(domain === "Domain" ? null : domain);
+  };
+
   // Filtered Members
   const filteredData =
     userData?.filter((user) => {
@@ -53,12 +59,13 @@ function MemberTable({ userDetails }) {
         !selectedEmailAddress || user.emailAddress === selectedEmailAddress;
       const matchesMobileNumber =
         !selectedMobileNumber || user.mobileNumber === selectedMobileNumber;
-
+      const matchesDomain = !selectedDomain || user.domain === selectedDomain;
       return (
         matchesName &&
         matchesVerificationStatus &&
         matchesEmail &&
-        matchesMobileNumber
+        matchesMobileNumber &&
+        matchesDomain
       );
     }) ?? userData;
 
@@ -124,7 +131,7 @@ function MemberTable({ userDetails }) {
       ],
     },
     {
-      title: "Domain",
+      title: <DomainDropDown userData={userData} onChange={handleDomain} />,
       children: [
         {
           title: "Domain",
